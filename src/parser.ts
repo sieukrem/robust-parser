@@ -54,9 +54,7 @@ export class Parser{
     public parse(text:string):void{
         this.context = { prev:null, rules: this.rules.startRules || [], stops:[] };
         this.state = {pos:0, text:text};
-        while(this.context){
-            // handle stop rules
-            
+        while(this.context){            
             const closestMatch = this.getClosestMatch(this.context.stops.concat(this.context.rules), this.state.pos, text);
             if (!closestMatch){ // nothing found leave current context
                 this.context = this.context.prev;
