@@ -1,8 +1,11 @@
 {
-  "name": "robust-parser",
+  "name": "@sieukrem/robust-parser",
   "version": "1.0.0",
   "description": "Simple and robust parser",
-  "main": "index.js",
+  "files": [
+    "out",
+    "!*.test.*"
+  ],
   "scripts": {
     "compile": "tsc -p ./tsconfig.json",
     "unit-test": "mocha -r ts-node/register src/**/*.test.ts"
