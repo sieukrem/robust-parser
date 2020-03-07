@@ -1,5 +1,5 @@
 import * as assert from "chai";
-import { Parser } from "./Parser";
+import { Parser } from "./parser";
 
 describe("Parser",()=>{
     describe("ctor",()=>{
