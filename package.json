@@ -1,0 +1,28 @@
+{
+  "name": "robust-parser",
+  "version": "1.0.0",
+  "description": "Simple and robust parser",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc -p ./tsconfig.json",
+    "unit-test": "mocha -r ts-node/register src/**/*.test.ts"
+  },
+  "keywords": [
+    "javascript",
+    "regex",
+    "parser"
+  ],
+  "author": "Eugen Kremer",
+  "license": "MIT",
+  "devDependencies": {
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.4",
+    "mocha": "^7.1.0",
+    "ts-node": "^8.6.2"
+  },
+  "dependencies": {
+    "@types/chai": "^4.2.10",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0"
+  }
+}
