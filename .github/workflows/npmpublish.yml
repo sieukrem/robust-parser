@@ -40,3 +40,4 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          version: $(cat version.txt && echo -n "." && git rev-list --count $(git log -1 --pretty=format:"%h" version.txt)..HEAD)
