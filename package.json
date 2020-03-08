@@ -1,6 +1,6 @@
 {
   "name": "@sieukrem/robust-parser",
-  "version": "1.0.0",
+  "version": "1.0.0-localbuild",
   "description": "Simple and robust parser",
   "files": [
     "out",
@@ -25,8 +25,5 @@
     "@types/chai": "^4.2.10",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0"
-  },
-  "dependencies": {
-    
   }
 }
