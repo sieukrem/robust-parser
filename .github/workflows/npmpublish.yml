@@ -12,7 +12,7 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
       - run: npm run unit-test
 
   publish-gpr:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,11 +34,12 @@ jobs:
           node-version: 12
           registry-url: https://npm.pkg.github.com/
           scope: ${{github.actor}}
-      - run: version=$(cat version.txt && echo -n "." && git rev-list --count $(git log -1 --pretty=format:"%h" version.txt)..HEAD) && echo $version
-      - run: npm ci
-      - run: echo $version
-      - run: npm run compile
-      - run: sed -i "s/1.0.0-localbuild/$version/g" package.json
-      - run: npm publish
+      - run: |
+          version=$(cat version.txt && echo -n "." && git rev-list --count $(git log -1 --pretty=format:"%h" version.txt)..HEAD) && echo $version
+          npm ci
+          echo $version
+          npm run compile
+          sed -i "s/1.0.0-localbuild/$version/g" package.json
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
