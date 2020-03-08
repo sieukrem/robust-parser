@@ -34,6 +34,7 @@ jobs:
           scope: '@sieukrem'
       - run: version=$(cat version.txt && echo -n "." && git rev-list --count $(git log -1 --pretty=format:"%h" version.txt)..HEAD)
       - run: npm ci
+      - run: echo $version
       - run: npm run compile
       - run: sed -i "s/1.0.0-localbuild/$version/g" package.json
       - run: npm publish
