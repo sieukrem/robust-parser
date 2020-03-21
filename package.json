@@ -6,6 +6,7 @@
     "out",
     "!*.test.*"
   ],
+  "types": "parser.d.js",
   "scripts": {
     "compile": "tsc -p ./tsconfig.json",
     "unit-test": "mocha -r ts-node/register src/**/*.test.ts"

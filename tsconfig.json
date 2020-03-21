@@ -16,9 +16,11 @@
 		"noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
 		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
 		"strictNullChecks": true
-	},
+	},"include": [
+		"src/*.ts"
+	],
 	"exclude": [
 		"node_modules",
-		"out"
+		"**/*.test.ts"
 	]
 }
