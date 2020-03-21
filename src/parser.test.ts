@@ -22,7 +22,7 @@ describe("Parser",()=>{
         it("calls fn when matches", ()=>{
             let calledTimes : number = 0;
             const testee = new Parser({ startRules : ["rule1"], rules:[
-                {name:"rule1", regex: /abc/g, fn: (p,match, isCalledAsStop )=>{
+                {name:"rule1", regex: /abc/g, fn: (match, isCalledAsStop)=>{
                     calledTimes++;
                     }
                 }]
@@ -30,6 +30,21 @@ describe("Parser",()=>{
             testee.parse("abc   abc cba"),
 
             assert.expect(calledTimes).to.eq(2);
+        });
+
+        it("provide payload to match fn", ()=>{
+            let payloadObj = {a:"a"};
+            let captured = null;
+            const testee = new Parser<{a:any}>
+            ({ startRules : ["rule1"], rules:[
+                {name:"rule1", regex: /abc/g, fn: (match, isCalledAsStop, payload)=>{
+                    captured = payload;
+                    }
+                }]
+            });
+            testee.parse("abc   abc cba", payloadObj),
+
+            assert.expect(captured).to.eq(payloadObj);
         });
     });
 });

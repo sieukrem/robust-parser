@@ -1,18 +1,18 @@
-export interface IRule{
+export interface IRule<TPayload>{
     name : string;
     regex : RegExp;
     inner?: string[];
     stops?: string[];
-    fn?: ((parser: Parser, match:RegExpExecArray, isCalledAsStop:boolean)=>void);
+    fn?: ((match:RegExpExecArray, isCalledAsStop:boolean, payload?:TPayload)=>void);
 }
 
-export interface IRules{
-    rules: IRule[];
+export interface IRules<TPayload>{
+    rules: IRule<TPayload>[];
     startRules: string[];
 }
 
-export class Parser{
-    private getHashOfRules(rules:IRules):any{
+export class Parser<TPayload>{
+    private getHashOfRules(rules:IRules<TPayload>):any{
         const hash : any = {};
         for(var i=0; i<rules.rules.length; i++){
             var rule = rules.rules[i];
@@ -28,8 +28,10 @@ export class Parser{
         return hash;
     }
 
-    private getClosestMatch(rulesOfContext:string[], position:number, text:string): {match:RegExpExecArray, rule:IRule}|null{
-        let last : {match:RegExpExecArray, rule:IRule}|null = null;
+    private hashOfRules:any;
+
+    private getClosestMatch(rulesOfContext:string[], position:number, text:string): {match:RegExpExecArray, rule:IRule<TPayload>}|null{
+        let last : {match:RegExpExecArray, rule:IRule<TPayload>}|null = null;
         for(var i=0; i<rulesOfContext.length;i++){
             var rule = this.hashOfRules[rulesOfContext[i]];
             rule.regex.lastIndex = position;
@@ -47,39 +49,39 @@ export class Parser{
         return last;
     }
 
-    private hashOfRules:any;
-    private context:any;
-    private state:any;
 
-    public parse(text:string):void{
-        this.context = { prev:null, rules: this.rules.startRules || [], stops:[] };
-        this.state = {pos:0, text:text};
-        while(this.context){            
-            const closestMatch = this.getClosestMatch(this.context.stops.concat(this.context.rules), this.state.pos, text);
+
+    public parse(text:string, payload?:TPayload):void{
+        let context : any = { prev:null, rules: this.rules.startRules || [], stops:[] };
+        const state : any = {pos:0, text:text};
+
+        while(context){            
+            const closestMatch = this.getClosestMatch(context.stops.concat(context.rules), state.pos, text);
             if (!closestMatch){ // nothing found leave current context
-                this.context = this.context.prev;
+                context = context.prev;
                 continue;
             }
             
-            const isStop = this.context.stops.indexOf(closestMatch.rule.name)>=0;
+            const isStop = context.stops.indexOf(closestMatch.rule.name)>=0;
             
             if (closestMatch.rule.fn) {
-                closestMatch.rule.fn(this, closestMatch.match, isStop);
+                closestMatch.rule.fn(closestMatch.match, isStop, payload);
             }
 
             if (isStop){
-                this.context = this.context.prev;
+                context = context.prev;
                 continue;
             }
 
-            this.state.pos = closestMatch.rule.regex.lastIndex;
+            state.pos = closestMatch.rule.regex.lastIndex;
             
             if (closestMatch.rule.inner) {
-                this.context = { prev: this.context, rules: closestMatch.rule.inner, stops: closestMatch.rule.stops||[] };
+                context = { prev: context, rules: closestMatch.rule.inner, stops: closestMatch.rule.stops||[] };
             }
         }
     }
-    public constructor(private readonly rules:IRules){
+
+    public constructor(private readonly rules:IRules<TPayload>){
         this.hashOfRules = this.getHashOfRules(rules);
 	}
 }
