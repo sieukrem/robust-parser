@@ -95,7 +95,7 @@ export class Parser<TPayload>{
         rules.rules.forEach(current=>{
             current.inner?.forEach(icurrent=>{
                 if (!this.hashOfRules[icurrent]) {
-                    throw new Error("Inner rule "+current+" of "+current+" does not exist");
+                    throw new Error("Inner rule "+icurrent+" of "+current.name+" does not exist");
                 }
             });
         });
@@ -103,7 +103,7 @@ export class Parser<TPayload>{
         rules.rules.forEach(current=>{
             current.stops?.forEach(icurrent=>{
                 if (!this.hashOfRules[icurrent]) {
-                    throw new Error("Stop rule "+current+" of "+current+" does not exist");
+                    throw new Error("Stop rule "+icurrent+" of "+current.name+" does not exist");
                 }
             });
         });
