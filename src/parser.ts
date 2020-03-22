@@ -25,6 +25,7 @@ export class Parser<TPayload>{
                 
             hash[rule.name] = rule;
         }
+
         return hash;
     }
 
@@ -34,6 +35,7 @@ export class Parser<TPayload>{
         let last : {match:RegExpExecArray, rule:IRule<TPayload>}|null = null;
         for(var i=0; i<rulesOfContext.length;i++){
             var rule = this.hashOfRules[rulesOfContext[i]];
+
             rule.regex.lastIndex = position;
             var match = rule.regex.exec(text);
             if(!match) {
@@ -83,5 +85,19 @@ export class Parser<TPayload>{
 
     public constructor(private readonly rules:IRules<TPayload>){
         this.hashOfRules = this.getHashOfRules(rules);
+
+        rules.startRules.forEach(current=>{
+            if (!this.hashOfRules[current]) {
+                throw new Error("Start rule "+current+" does not exist");
+            }
+        });
+
+        rules.rules.forEach(current=>{
+            current.inner?.forEach(icurrent=>{
+                if (!this.hashOfRules[icurrent]) {
+                    throw new Error("Inner rule "+current+" of "+current+" does not exist");
+                }
+            });
+        });
 	}
 }

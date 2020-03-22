@@ -8,6 +8,16 @@ describe("Parser",()=>{
                 const parser = new Parser({ startRules:["rule1"], rules: [{name:"rule1", regex:/./g}, {name:"rule1",regex:/./g}]}); 
             }).to.throw();
         });
+        it("throws on missing start rule", ()=>{
+            assert.expect(()=>{
+                const parser = new Parser({ startRules:["rule2"], rules: [{name:"rule1", regex:/./g}]}); 
+            }).to.throw();
+        });
+        it("throws on missing inner rule", ()=>{
+            assert.expect(()=>{
+                const parser = new Parser({ startRules:["rule1"], rules: [{name:"rule1", inner:["rule2"], regex:/./g}, {name:"rule3",regex:/./g}]}); 
+            }).to.throw();
+        });
         it("throws on non global regex definition", ()=>{
             assert.expect(()=>{
                 const parser = new Parser({ startRules:["rule1"], rules:[{name:"rule1",regex:/./}]}); 
