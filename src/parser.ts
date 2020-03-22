@@ -99,5 +99,13 @@ export class Parser<TPayload>{
                 }
             });
         });
+
+        rules.rules.forEach(current=>{
+            current.stops?.forEach(icurrent=>{
+                if (!this.hashOfRules[icurrent]) {
+                    throw new Error("Stop rule "+current+" of "+current+" does not exist");
+                }
+            });
+        });
 	}
 }

@@ -18,6 +18,11 @@ describe("Parser",()=>{
                 const parser = new Parser({ startRules:["rule1"], rules: [{name:"rule1", inner:["rule2"], regex:/./g}, {name:"rule3",regex:/./g}]}); 
             }).to.throw();
         });
+        it("throws on missing stop rule", ()=>{
+            assert.expect(()=>{
+                const parser = new Parser({ startRules:["rule1"], rules: [{name:"rule1", stops:["rule2"], regex:/./g}, {name:"rule3",regex:/./g}]}); 
+            }).to.throw();
+        });        
         it("throws on non global regex definition", ()=>{
             assert.expect(()=>{
                 const parser = new Parser({ startRules:["rule1"], rules:[{name:"rule1",regex:/./}]}); 
